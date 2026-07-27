@@ -26,5 +26,12 @@ export const calendarApi = {
   },
   async createEvent(event) { return request('/api/events', { method: 'POST', body: JSON.stringify(event) }); },
   async updateEvent(id, event) { return request(`/api/events/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify(event) }); },
-  async deleteEvent(id) { return request(`/api/events/${encodeURIComponent(id)}`, { method: 'DELETE' }); }
+  async deleteEvent(id) { return request(`/api/events/${encodeURIComponent(id)}`, { method: 'DELETE' }); },
+  async listCategories() {
+    const data = await request('/api/categories');
+    return Array.isArray(data.categories) ? data.categories : [];
+  },
+  async createCategory(category) { return request('/api/categories', { method: 'POST', body: JSON.stringify(category) }); },
+  async updateCategory(name, category) { return request(`/api/categories/${encodeURIComponent(name)}`, { method: 'PUT', body: JSON.stringify(category) }); },
+  async deleteCategory(name) { return request(`/api/categories/${encodeURIComponent(name)}`, { method: 'DELETE' }); }
 };
