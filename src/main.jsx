@@ -203,9 +203,8 @@ function App() {
     <div className="app-shell">
       <header className="hero">
         <div>
-          <p className="eyebrow">Shared project calendar</p>
-          <h1>EVLE Calendar</h1>
-          <p className="hero-copy">Grouped by category, editable colors, tentative events, and readable full titles.</p>
+          <p className="eyebrow">EVLE Phase II & III</p>
+          <h1>Lookahead Calendar</h1>
         </div>
         <div className="hero-actions">
           <button onClick={() => setAnchorMonth(new Date(new Date().getFullYear(), new Date().getMonth(), 1))}>Current Month</button>
