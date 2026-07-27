@@ -30,14 +30,14 @@ h1 { margin: 0.25rem 0; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
 .month-card h2, .legend-card h2 { margin: 0; }
 .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; margin: 0.85rem 0 0.4rem; color: #66768c; font-size: 0.78rem; font-weight: 800; text-align: center; }
 .days-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.35rem; }
-.day-cell { min-height: 160px; padding: 0.5rem; text-align: left; border: 1px solid #e3eaf3; background: #fbfdff; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; gap: 0.35rem; }
+.day-cell { min-height: 90px; padding: 0.5rem; text-align: left; border: 1px solid #e3eaf3; background: #fbfdff; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; gap: 0.35rem; }
 .day-cell.outside { opacity: 0.52; background: #f7f9fc; }
 .day-cell.today { outline: 2px solid #0f66cc; outline-offset: -2px; }
 .day-number { font-weight: 900; color: #102033; }
 .event-stack { display: grid; gap: 0.45rem; align-content: start; }
 .category-event-group { display: grid; gap: 0.25rem; }
 .category-inline-label { display: inline-block; font-size: 0.68rem; font-weight: 950; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.1; }
-.event-chip { display: block; border-left: 5px solid #0f66cc; border-radius: 8px; background: #eef4fb; padding: 0.34rem 0.4rem; color: #102033; font-size: 0.78rem; font-weight: 800; white-space: normal; overflow-wrap: anywhere; word-break: normal; line-height: 1.22; cursor: pointer; }
+.event-chip { display: block; border-left: 5px solid #0f66cc; border-radius: 8px; background: #eef4fb; padding: 1px 3px; color: #102033; font-size: 0.62rem; font-weight: 800; white-space: normal; overflow-wrap: anywhere; word-break: normal; line-height: 1; cursor: pointer; }
 .event-chip.tentative { font-style: italic; font-weight: 650; background: repeating-linear-gradient(135deg, #f8fbff, #f8fbff 6px, #eef4fb 6px, #eef4fb 12px); }
 .legend-card { padding: 1rem; display: grid; gap: 0.9rem; }
 .legend-bottom { margin-top: 1rem; }

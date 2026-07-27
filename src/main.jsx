@@ -218,9 +218,9 @@ function App() {
           <button className={view === 'quarter' ? 'active' : ''} onClick={() => setView('quarter')}>3 Months</button>
         </div>
         <div className="month-controls">
-          <button onClick={() => setAnchorMonth(addMonths(anchorMonth, view === 'quarter' ? -3 : -1))}>Previous</button>
+          <button onClick={() => setAnchorMonth(addMonths(anchorMonth, -1))}>Previous</button>
           <strong>{view === 'quarter' ? `${monthTitle(anchorMonth)} to ${monthTitle(addMonths(anchorMonth, 2))}` : monthTitle(anchorMonth)}</strong>
-          <button onClick={() => setAnchorMonth(addMonths(anchorMonth, view === 'quarter' ? 3 : 1))}>Next</button>
+          <button onClick={() => setAnchorMonth(addMonths(anchorMonth, 1))}>Next</button>
         </div>
         <div className="toolbar-actions">
           <button onClick={openCategoryManager}>Manage Categories</button>
