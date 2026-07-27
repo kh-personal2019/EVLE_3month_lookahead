@@ -257,7 +257,7 @@ function App() {
           <form onSubmit={saveEvent} className="event-form">
             <label>Title<input autoFocus value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} required /></label>
             <div className="two-col">
-              <label>Start date<input type="date" value={draft.date} onChange={(event) => {const newStart = event.target.value;setDraft({...draft,date: newStart,endDate:draft.endDate < newStart? newStart: draft.endDate});}}required/></label>
+              <label>Start date<input type="date" value={draft.date} onChange={(event) => {const newStart = event.target.value;setDraft({...draft,date: newStart,endDate: newStart});}}required/></label>
               <label>End date<input type="date" value={draft.endDate || draft.date} onChange={(event) => setDraft({ ...draft, endDate: event.target.value })} /></label>
             </div>
             <label>Category<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{categoryNames.map((category) => <option key={category}>{category}</option>)}</select></label>
