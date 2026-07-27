@@ -246,8 +246,8 @@ function App() {
       {showPasswordModal && (
         <Modal title="Enter edit password" onClose={() => setShowPasswordModal(false)}>
           <p className="modal-help">Password is requested only when you add/edit/delete events or manage categories.</p>
-          <label>Password<input type="password" autoFocus value={editKey} onChange={(event) => setEditKey(event.target.value)} placeholder="Shared edit password" /></label>
-          <label className="check-row modal-check"><input type="checkbox" checked={rememberKey} onChange={(event) => setRememberKey(event.target.checked)} />Remember on this device</label>
+          <label>Password<input type="password" autoFocus value={editKey} ={(event) => setEditKey(event.target.value)} placeholder="Shared edit password" /></label>
+          <label className="check-row modal-check"><input type="checkbox" checked={rememberKey} ={(event) => setRememberKey(event.target.checked)} />Remember on this device</label>
           <div className="modal-actions"><button className="primary" onClick={continueFromPassword}>Continue</button><button onClick={() => setShowPasswordModal(false)}>Cancel</button></div>
         </Modal>
       )}
@@ -255,12 +255,12 @@ function App() {
       {showEventModal && (
         <Modal title={selectedEvent ? 'Edit event' : 'Add event'} onClose={closeEventModal} large>
           <form onSubmit={saveEvent} className="event-form">
-            <label>Title<input autoFocus value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} required /></label>
+            <label>Title<input autoFocus value={draft.title} ={(event) => setDraft({ ...draft, title: event.target.value })} required /></label>
             <div className="two-col">
-              <label>Start date<input type="date" value={draft.date} onChange={(event) => setDraft({ ...draft, date: event.target.value, endDate: draft.endDate || event.target.value })} required /></label>
-              <label>End date<input type="date" value={draft.endDate || draft.date} onChange={(event) => setDraft({ ...draft, endDate: event.target.value })} /></label>
+              <label>Start date<input type="date" value={draft.date} onChange={(event) => {const newStart = event.target.value;setDraft({...draft,date: newStart,endDate:draft.endDate < newStart? newStart: draft.endDate});}}required/></label>
+              <label>End date<input type="date" value={draft.endDate || draft.date} ={(event) => setDraft({ ...draft, endDate: event.target.value })} /></label>
             </div>
-            <label>Category<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{categoryNames.map((category) => <option key={category}>{category}</option>)}</select></label>
+            <label>Category<select value={draft.category} ={(event) => setDraft({ ...draft, category: event.target.value })}>{categoryNames.map((category) => <option key={category}>{category}</option>)}</select></label>
             <label className="check-row"><input type="checkbox" checked={Boolean(draft.tentative)} onChange={(event) => setDraft({ ...draft, tentative: event.target.checked })} />Tentative</label>
             <label>Location<input value={draft.location || ''} onChange={(event) => setDraft({ ...draft, location: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
