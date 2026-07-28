@@ -65,6 +65,12 @@ h1 { margin: 0.25rem 0; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
 
 .search-box { min-width: 220px; max-width: 320px;}
 
+/* Compact 3-month view */
+.calendar-grid.three-month .event-chip {display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;text-overflow: ellipsis;line-height: 1.05;max-height: 2.1em;font-size: 0.62rem;padding: 1px 3px;white-space: normal;word-break: break-word;}
+
+.calendar-grid.three-month .day-cell {min-height: 90px;}
+.calendar-grid.three-month .category-event-group {gap: 1px;}
+.calendar-grid.three-month .event-stack {gap: 1px;}
 
 @media (max-width: 1280px) { .calendar-grid.three-month { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .app-shell { padding: 0.8rem; } .hero, .toolbar { align-items: stretch; flex-direction: column; } .month-controls { justify-content: space-between; } .day-cell { min-height: 120px; } .two-col, .category-add-form, .category-row { grid-template-columns: 1fr; } }
