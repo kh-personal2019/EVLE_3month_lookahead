@@ -42,21 +42,6 @@ function App() {
 
   useEffect(() => { loadEverything(); }, []);
 
-  useEffect(() => {
-    if (editKey) {
-      if (rememberKey) {
-        localStorage.setItem('calendarEditKey', editKey);
-        sessionStorage.removeItem('calendarEditKey');
-      } else {
-        sessionStorage.setItem('calendarEditKey', editKey);
-        localStorage.removeItem('calendarEditKey');
-      }
-    } else {
-      localStorage.removeItem('calendarEditKey');
-      sessionStorage.removeItem('calendarEditKey');
-    }
-  }, [editKey, rememberKey]);
-
   function sortEvents(a, b) { return a.date.localeCompare(b.date) || a.category.localeCompare(b.category) || a.title.localeCompare(b.title); }
 
   function openAddFlow(date = todayISO()) {
@@ -65,7 +50,7 @@ function App() {
   }
 
   function openCategoryManager() {
-    requirePasswordThen('category', () => setShowCategoryModal(true));
+    setShowCategoryModal(true);
   }
 
   function startNewEvent(date = todayISO()) {
