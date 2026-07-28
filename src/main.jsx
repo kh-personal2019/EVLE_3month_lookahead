@@ -20,9 +20,15 @@ function App() {
   const [pendingDate, setPendingDate] = useState(todayISO());
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [showFilterModal, setShowFilterModal] = useState(false);function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelectedCategories([...selectedCategories,categoryName]);} else {setSelectedCategories(selectedCategories.filter(item => item !== categoryName));}}
-  const visibleEvents = events.filter((event) => {const categoryMatch =selectedCategories.length === 0 ||selectedCategories.includes(event.category);const searchMatch =searchText.trim() === "" ||event.title.toLowerCase().includes(searchText.toLowerCase()) ||(event.notes || "").toLowerCase().includes(searchText.toLowerCase()) ||(event.location || "").toLowerCase().includes(searchText.toLowerCase());return categoryMatch && searchMatch;});
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
+function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelectedCategories([...selectedCategories,categoryName]);} else {setSelectedCategories(selectedCategories.filter(item => item !== categoryName));}}
+
+  const visibleEvents = events.filter((event) => 
+    {const categoryMatch =selectedCategories.length === 0 ||selectedCategories.includes(event.category);
+    const searchMatch =searchText.trim() === "" ||event.title.toLowerCase().includes(searchText.toLowerCase()) ||(event.notes || "").toLowerCase().includes(searchText.toLowerCase()) ||(event.location || "").toLowerCase().includes(searchText.toLowerCase());
+  return categoryMatch && searchMatch;
+});
 
   const categoryColorMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.name, c.color])), [categories]);
   const categoryNames = useMemo(() => categories.map((c) => c.name), [categories]);
@@ -183,10 +189,10 @@ function App() {
         </div>
         <div className="toolbar-actions">
 	  <input className="search-box" type="text" placeholder="Search events..." value={searchText} onChange={(event) => setSearchText(event.target.value)}/>
-          <button onClick={openCategoryManager}>Manage Categories</button>
-	  <div className="category-filter"><strong>Filter:</strong>{categories.map((category) => (<label key={category.name} className="filter-chip"> <input type="checkbox" checked={selectedCategories.includes(category.name)} onChange={(event) => {if (event.target.checked) {setSelectedCategories([...selectedCategories,category.name]);} else {setSelectedCategories(selectedCategories.filter(c => c !== category.name));}}}/>{category.name}</label>))}</div>
-          <button className="primary" onClick={() => openAddFlow(todayISO())}>Add Event</button>
-        </div>
+	  <button type="button" onClick={() => setShowFilterModal(true)}> Filter </button>
+	  <button onClick={openCategoryManager}> Manage Categories </button>
+	  <button className="primary" onClick={() => openAddFlow(todayISO())}> Add Event </button>
+	</div>
       </section>
 
       <section className="status-strip"><span>{status}</span></section>
