@@ -323,8 +323,8 @@ function Month({ month, events, categories, categoryColorMap, onNew, onEdit }) {
           if (uncategorized.length) grouped.push({ category: { name: 'Uncategorized', color: '#475569' }, events: uncategorized });
           const isOutside = day.getMonth() !== monthNumber;
           const isToday = iso === todayISO();
-          return <button key={iso} className={`day-cell ${isOutside ? 'outside' : ''} ${isToday ? 'today' : ''}`} onDoubleClick={() => onNew(iso)} type="button"><span className="day-number">{day.getDate()}</span><div className="event-stack">{grouped.map((group) => <div className="category-event-group" key={group.category.name}><span className="category-inline-label" style={{ color: group.category.color }}>{group.category.name}</span>{group.events.map((event) => <span key={event.id} title={event.title} className={`event-chip ${event.tentative ? 'tentative' : ''}`} style={{ borderLeftColor: categoryColorMap[event.category] || group.category.color || '#2563eb' }} onClick={(clickEvent) => { clickEvent.stopPropagation(); onEdit(event); }}>{event.title}</span>)}</div>)}</div></button>;
-        })}
+          return <button key={iso} className={`day-cell ${isOutside ? 'outside' : ''} ${isToday ? 'today' : ''}`} onDoubleClick={() => onNew(iso)} type="button"><span className="day-number">{day.getDate()}</span><div className="event-stack">{grouped.map((group) => 
+	    <div className="category-event-group" key={{"Station Area Planning": "SAP", "Permitting Working Group": "PWG", "Third-Party Prep": "3P Prep", "WDFW Meeting": "WDFW"}[group.category.name] || group.category.name}><span className="category-inline-label" style={{ color: group.category.color }}>{group.category.name}</span>{group.events.map((event) => <span key={event.id} title={event.title} className={`event-chip ${event.tentative ? 'tentative' : ''}`} style={{ borderLeftColor: categoryColorMap[event.category] || group.category.color || '#2563eb' }} onClick={(clickEvent) => { clickEvent.stopPropagation(); onEdit(event); }}>{event.title}</span>)}</div>)}</div></button>;})}
       </div>
     </section>
   );
