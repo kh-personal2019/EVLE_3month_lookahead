@@ -14,14 +14,13 @@ function App() {
   const [draft, setDraft] = useState(() => ({ ...EMPTY_EVENT, date: todayISO(), endDate: todayISO() }));
   const [categoryDraft, setCategoryDraft] = useState({ name: '', color: '#2563eb' });
   const [status, setStatus] = useState('Loading shared calendar...');
-  const [editKey, setEditKey] = useState(() => localStorage.getItem('calendarEditKey') || sessionStorage.getItem('calendarEditKey') || '');
-  const [rememberKey, setRememberKey] = useState(() => Boolean(localStorage.getItem('calendarEditKey')));
   const [isSaving, setIsSaving] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [passwordPurpose, setPasswordPurpose] = useState('event');
   const [showEventModal, setShowEventModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [pendingDate, setPendingDate] = useState(todayISO());
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
 
   const categoryColorMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.name, c.color])), [categories]);
   const categoryNames = useMemo(() => categories.map((c) => c.name), [categories]);
@@ -60,35 +59,9 @@ function App() {
 
   function sortEvents(a, b) { return a.date.localeCompare(b.date) || a.category.localeCompare(b.category) || a.title.localeCompare(b.title); }
 
-  function requirePasswordThen(purpose, callback) {
-    if (!editKey) {
-      setPasswordPurpose(purpose);
-      setShowPasswordModal(true);
-      return false;
-    }
-    callback?.();
-    return true;
-  }
-
-  function continueFromPassword() {
-    if (!editKey.trim()) {
-      setStatus('Enter the edit password to continue.');
-      return;
-    }
-    setShowPasswordModal(false);
-    if (passwordPurpose === 'category') setShowCategoryModal(true);
-    else {
-      startNewEvent(pendingDate);
-      setShowEventModal(true);
-    }
-  }
-
   function openAddFlow(date = todayISO()) {
-    setPendingDate(date);
-    requirePasswordThen('event', () => {
-      startNewEvent(date);
-      setShowEventModal(true);
-    });
+    startNewEvent(date);
+    setShowEventModal(true);
   }
 
   function openCategoryManager() {
@@ -117,7 +90,6 @@ function App() {
     formEvent.preventDefault();
     const normalized = normalizeEvent(draft);
     if (!normalized.title) { setStatus('Add a title before saving.'); return; }
-    if (!editKey) { setStatus('Enter the edit password before saving changes.'); return; }
     setIsSaving(true);
     try {
       if (selectedEvent) {
@@ -223,7 +195,9 @@ function App() {
           <button onClick={() => setAnchorMonth(addMonths(anchorMonth, 1))}>Next</button>
         </div>
         <div className="toolbar-actions">
+	  <input className="search-box" type="text" placeholder="Search events..." value={searchText} onChange={(event) => setSearchText(event.target.value)}/>
           <button onClick={openCategoryManager}>Manage Categories</button>
+	  <div className="category-filter"><strong>Filter:</strong>{categories.map((category) => (<label key={category.name} className="filter-chip"> <input type="checkbox" checked={selectedCategories.includes(category.name)} onChange={(event) => {if (event.target.checked) {setSelectedCategories([...selectedCategories,category.name]);} else {setSelectedCategories(selectedCategories.filter(c => c !== category.name));}}}/>{category.name}</label>))}</div>
           <button className="primary" onClick={() => openAddFlow(todayISO())}>Add Event</button>
         </div>
       </section>
@@ -233,7 +207,7 @@ function App() {
       <main className="layout full-width">
         <section className={view === 'quarter' ? 'calendar-grid three-month' : 'calendar-grid'}>
           {visibleMonths.map((month) => (
-            <Month key={month.toISOString()} month={month} events={events} categories={categories} categoryColorMap={categoryColorMap} onNew={openAddFlow} onEdit={startEditEvent} />
+            <Month key={month.toISOString()} month={month} events={visibleEvents} categories={categories} categoryColorMap={categoryColorMap} onNew={openAddFlow} onEdit={startEditEvent} />
           ))}
         </section>
       </main>
@@ -242,15 +216,6 @@ function App() {
         <h2>Legend</h2>
         <div className="legend-list">{categories.map((category) => <span key={category.name}><i style={{ background: category.color }} />{category.name}</span>)}</div>
       </section>
-
-      {showPasswordModal && (
-        <Modal title="Enter edit password" onClose={() => setShowPasswordModal(false)}>
-          <p className="modal-help">Password is requested only when you add/edit/delete events or manage categories.</p>
-          <label>Password<input type="password" autoFocus value={editKey} onChange={(event) => setEditKey(event.target.value)} placeholder="Shared edit password" /></label>
-          <label className="check-row modal-check"><input type="checkbox" checked={rememberKey} onChange={(event) => setRememberKey(event.target.checked)} />Remember on this device</label>
-          <div className="modal-actions"><button className="primary" onClick={continueFromPassword}>Continue</button><button onClick={() => setShowPasswordModal(false)}>Cancel</button></div>
-        </Modal>
-      )}
 
       {showEventModal && (
         <Modal title={selectedEvent ? 'Edit event' : 'Add event'} onClose={closeEventModal} large>
