@@ -58,6 +58,13 @@ h1 { margin: 0.25rem 0; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
 .category-row { display: grid; grid-template-columns: minmax(180px, 1fr) 90px auto auto; gap: 0.65rem; align-items: center; padding: 0.75rem; border: 1px solid #e3eaf3; border-radius: 16px; background: #fff; }
 /* Larger events in 1-month view only */
 .calendar-grid:not(.three-month) .event-chip {font-size: 0.82rem;padding: 0.42rem 0.5rem;line-height: 1.3;}.calendar-grid:not(.three-month) .day-cell {min-height: 135px;}
+/* Filter button popup styling */
+.category-filter-popup {display: grid;gap: 1rem;}.filter-chip-grid {display: grid;grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.55rem;}.filter-chip {display: flex;align-items: center;gap: 0.5rem;padding: 0.55rem 0.65rem;border: 1px solid #dce4ef;
+  border-radius: 999px;background: #f8fbff;color: #102033;font-size: 0.85rem;font-weight: 800;}.filter-chip input { width: auto;}
+.filter-color-dot {width: 12px; height: 12px; border-radius: 999px; display: inline-block; flex: 0 0 auto;}
+
+.search-box { min-width: 220px; max-width: 320px;}
+
 
 @media (max-width: 1280px) { .calendar-grid.three-month { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .app-shell { padding: 0.8rem; } .hero, .toolbar { align-items: stretch; flex-direction: column; } .month-controls { justify-content: space-between; } .day-cell { min-height: 120px; } .two-col, .category-add-form, .category-row { grid-template-columns: 1fr; } }
