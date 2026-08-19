@@ -208,7 +208,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
 
       <section className="legend-card legend-bottom">
         <h2>Legend</h2>
-        <div className="legend-list">{categories.map((category) => <span key={category.name}><i style={{ background: category.color }} />{category.name}</span>)}</div>
+        <div className="legend-list">{[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <span key={category.name}><i style={{ background: category.color }} />{category.name}</span>)}</div>
       </section>
 
       {showFilterModal && (
@@ -223,7 +223,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             </p>
 
             <div className="filter-chip-grid">
-              {categories.map((category) => (
+              {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
                 <label key={category.name} className="filter-chip">
                   <input
                     type="checkbox"
@@ -271,7 +271,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
               <label>Start date<input type="date" value={draft.date} onChange={(event) => {const newStart = event.target.value;setDraft({...draft,date: newStart,endDate: newStart});}}required/></label>
               <label>End date<input type="date" value={draft.endDate || draft.date} onChange={(event) => setDraft({ ...draft, endDate: event.target.value })} /></label>
             </div>
-            <label>Category<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{categoryNames.map((category) => <option key={category}>{category}</option>)}</select></label>
+            <label>Category<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <option key={category}>{category}</option>)}</select></label>
             <label className="check-row"><input type="checkbox" checked={Boolean(draft.tentative)} onChange={(event) => setDraft({ ...draft, tentative: event.target.checked })} />Tentative</label>
             <label>Location<input value={draft.location || ''} onChange={(event) => setDraft({ ...draft, location: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
@@ -288,7 +288,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <button className="primary" disabled={isSaving}>Add Category</button>
           </form>
           <div className="category-manager-list">
-            {categories.map((category) => <CategoryEditor key={category.name} category={category} onUpdate={updateCategory} onDelete={deleteCategory} disabled={isSaving} />)}
+            {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <CategoryEditor key={category.name} category={category} onUpdate={updateCategory} onDelete={deleteCategory} disabled={isSaving} />)}
           </div>
         </Modal>
       )}
