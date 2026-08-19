@@ -30,13 +30,12 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
   return categoryMatch && searchMatch;
 });
 
-  const categoryColorMap = useMemo(() => Object.fromEntries(sortedCategories.map((c) => [c.name, c.color])), [categories]);
-  const categoryNames = useMemo(() => sortedCategories.map((c) => c.name), [categories]);
+  const categoryColorMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.name, c.color])), [categories]);
+  const categoryNames = useMemo(() => categories.map((c) => c.name), [categories]);
   const selectedEvent = selectedEventId ? events.find((event) => event.id === selectedEventId) : null;
   const visibleMonths = useMemo(() => Array.from({ length: view === 'quarter' ? 3 : 1 }, (_, index) => addMonths(anchorMonth, index)), [anchorMonth, view]);
 
-  const sortedCategories = [...categories].sort((a,b) => a.name.localeCompare(b.name));
-
+  
   async function loadEverything() {
     try {
       setStatus('Loading shared calendar...');
@@ -209,7 +208,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
 
       <section className="legend-card legend-bottom">
         <h2>Legend</h2>
-        <div className="legend-list">{sortedCategories.map((category) => <span key={category.name}><i style={{ background: category.color }} />{category.name}</span>)}</div>
+        <div className="legend-list">{categories.map((category) => <span key={category.name}><i style={{ background: category.color }} />{category.name}</span>)}</div>
       </section>
 
       {showFilterModal && (
@@ -224,7 +223,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             </p>
 
             <div className="filter-chip-grid">
-              {sortedCategories.map((category) => (
+              {categories.map((category) => (
                 <label key={category.name} className="filter-chip">
                   <input
                     type="checkbox"
@@ -289,7 +288,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <button className="primary" disabled={isSaving}>Add Category</button>
           </form>
           <div className="category-manager-list">
-            {sortedCategories.map((category) => <CategoryEditor key={category.name} category={category} onUpdate={updateCategory} onDelete={deleteCategory} disabled={isSaving} />)}
+            {categories.map((category) => <CategoryEditor key={category.name} category={category} onUpdate={updateCategory} onDelete={deleteCategory} disabled={isSaving} />)}
           </div>
         </Modal>
       )}
@@ -320,7 +319,7 @@ function Month({ month, events, categories, categoryColorMap, onNew, onEdit }) {
         {days.map((day) => {
           const iso = toISODate(day);
           const dayEvents = events.filter((event) => eventOccursOn(event, iso));
-          const grouped = sortedCategories.map((category) => ({ category, events: dayEvents.filter((event) => event.category === category.name) })).filter((group) => group.events.length > 0);
+          const grouped = categories.map((category) => ({ category, events: dayEvents.filter((event) => event.category === category.name) })).filter((group) => group.events.length > 0);
           const uncategorized = dayEvents.filter((event) => !categories.some((category) => category.name === event.category));
           if (uncategorized.length) grouped.push({ category: { name: 'Uncategorized', color: '#475569' }, events: uncategorized });
           const isOutside = day.getMonth() !== monthNumber;
