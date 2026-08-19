@@ -31,7 +31,7 @@ h1 { margin: 0.25rem 0; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
 .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; margin: 0.85rem 0 0.4rem; color: #66768c; font-size: 0.78rem; font-weight: 800; text-align: center; }
 .days-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.35rem; }
 .day-cell { min-height: 90px; padding: 0.5rem; text-align: left; border: 1px solid #e3eaf3; background: #fbfdff; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; gap: 0.35rem; }
-.day-cell.outside { opacity: 0.52; background: #f7f9fc; }
+.day-cell.outside { opacity: 0.75; background: #f7f9fc; }
 .day-cell.today { outline: 2px solid #0f66cc; outline-offset: -2px; }
 .day-number { font-weight: 900; color: #102033; }
 .event-stack { display: grid; gap: 0.45rem; align-content: start; }
@@ -73,6 +73,11 @@ h1 { margin: 0.25rem 0; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; }
 .calendar-grid.three-month .event-stack {gap: 1px;}
 
 .calendar-grid.three-month .category-inline-label {display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;text-overflow: ellipsis; font-size: 0.55rem;line-heigh:1.05; font-weight: 700; word-break:break-word; white-space: normal; max-height: 2.1em;}
+
+/* past days */
+.day-cell.past-day {background: #e2e8f0; opacity:0.5;}
+.day-cell.past-day .day-number {color: #6b7280;}
+.day-cell.past-day .event-chip {opacity: 0.5;}
 
 @media (max-width: 1280px) { .calendar-grid.three-month { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .app-shell { padding: 0.8rem; } .hero, .toolbar { align-items: stretch; flex-direction: column; } .month-controls { justify-content: space-between; } .day-cell { min-height: 120px; } .two-col, .category-add-form, .category-row { grid-template-columns: 1fr; } }
