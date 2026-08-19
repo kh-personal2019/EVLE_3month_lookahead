@@ -288,7 +288,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <button className="primary" disabled={isSaving}>Add Category</button>
           </form>
           <div className="category-manager-list">
-            {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <CategoryEditor key={category.name} category={category.name} onUpdate={updateCategory} onDelete={deleteCategory} disabled={isSaving} />)}
+            {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <CategoryEditor key={category.name} category={category} onUpdate={updateCategory} onDelete={deleteCategory} disabled={isSaving} />)}
           </div>
         </Modal>
       )}
