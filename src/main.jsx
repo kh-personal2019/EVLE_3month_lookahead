@@ -63,7 +63,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
   }
 
   function startNewEvent(date = todayISO()) {
-    const fallbackCategory = categoryNames.includes('IDT') ? 'IDT' : categoryNames[0] || 'IDT';
+    const fallbackCategory = categoryNames.includes('Uncategorized') ? 'Uncategorized' : categoryNames[0] || 'Uncategorized';
     setSelectedEventId(null);
     setDraft({ ...EMPTY_EVENT, category: fallbackCategory, date, endDate: date, tentative: false });
   }
