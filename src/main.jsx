@@ -26,7 +26,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
 
   const visibleEvents = events.filter((event) => 
     {const categoryMatch =selectedCategories.length === 0 ||selectedCategories.includes(event.category);
-    const searchMatch =searchText.trim() === "" ||event.title.toLowerCase().includes(searchText.toLowerCase()) ||(event.notes || "").toLowerCase().includes(searchText.toLowerCase()) ||(event.location || "").toLowerCase().includes(searchText.toLowerCase());
+    const searchMatch =searchText.trim() === "" ||event.title.toLowerCase().includes(searchText.toLowerCase()) ||(event.presenter || "").toLowerCase().includes(searchText.toLowerCase()) ||(event.notes || "").toLowerCase().includes(searchText.toLowerCase()) ||(event.location || "").toLowerCase().includes(searchText.toLowerCase());
   return categoryMatch && searchMatch;
 });
 
@@ -274,6 +274,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <label>Category<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <option key={category.name} value={category.name}>{category.name}</option>)}</select></label>
             <label className="check-row"><input type="checkbox" checked={Boolean(draft.tentative)} onChange={(event) => setDraft({ ...draft, tentative: event.target.checked })} />Tentative</label>
             <label>Location<input value={draft.location || ''} onChange={(event) => setDraft({ ...draft, location: event.target.value })} /></label>
+            <label>Presenter<input value={draft.presenter || ''} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
             <div className="editor-actions"><button className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>{selectedEvent && <button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>}<button type="button" onClick={closeEventModal}>Cancel</button></div>
           </form>

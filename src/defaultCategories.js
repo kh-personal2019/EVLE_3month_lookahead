@@ -22,6 +22,7 @@ export const EMPTY_EVENT = {
   endDate: '',
   category: 'IDT',
   location: '',
+  presenter: '',
   notes: '',
   tentative: false
 };

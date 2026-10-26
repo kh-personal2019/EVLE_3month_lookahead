@@ -32,6 +32,7 @@ export function normalizeEvent(input) {
     endDate: endDate < date ? date : endDate,
     category: input.category || 'IDT',
     location: String(input.location || '').trim(),
+    presenter: String(input.presenter || '').trim(),
     notes: String(input.notes || '').trim(),
     tentative: Boolean(input.tentative)
   };
