@@ -278,7 +278,8 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <label>Presenter<input value={draft.presenter || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
             <div className="editor-actions">
-                {selectedEventId !== null && isEditingEvent === false ? (<button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>) : (<button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>)}
+                {selectedEventId !== null && !isEditingEvent (<button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>)}
+                {(!selectedEventId || isEditingEvent) && (<button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>)}
                 {selectedEventId !== null && isEditingEvent && (<button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>)}
                 {selectedEventId !== null && isEditingEvent && (<button type="button" onClick={() => {const originalEvent = events.find((event) => event.id === selectedEventId); if (originalEvent) {setDraft({...originalEvent, endDate: originalEvent.endDate || originalEvent.date, presenter: originalEvent.presenter || '', tentative: Boolean(originalEvent.tentative)});} setIsEditingEvent(false);}}>Cancel Editing</button>)}
                 <button type="button" onClick={closeEventModal}>Close</button>
