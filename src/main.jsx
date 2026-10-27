@@ -215,6 +215,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
         <div className="legend-list">{[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <span key={category.name}><i style={{ background: category.color }} />{category.name}</span>)}</div>
       </section>
 
+      
       {showFilterModal && (
         <Modal title="Filter categories" onClose={() => setShowFilterModal(false)} large>
           <div className="category-filter-popup">
@@ -244,67 +245,21 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             </div>
 
             <div className="editor-actions">
-  {selectedEventId !== null && isEditingEvent === false ? (
-    <button
-      type="button"
-      className="primary"
-      onClick={() => setIsEditingEvent(true)}
-    >
-      Edit Event
-    </button>
-  ) : (
-    <button
-      type="submit"
-      className="primary"
-      disabled={isSaving}
-    >
-      {isSaving ? 'Saving...' : 'Save Event'}
-    </button>
-  )}
-  {selectedEventId !== null && isEditingEvent && (
-    <button
-      type="button"
-      className="danger"
-      onClick={deleteSelectedEvent}
-      disabled={isSaving}
-    >
-      Delete
-    </button>
-  )}
-  {selectedEventId !== null && isEditingEvent && (
-    <button
-      type="button"
-      onClick={() => {
-        const originalEvent = events.find(
-          (event) => event.id === selectedEventId
-        );
-        if (originalEvent) {
-          setDraft({
-            ...originalEvent,
-            endDate:
-              originalEvent.endDate ||
-              originalEvent.date,
-            presenter:
-              originalEvent.presenter || '',
-            tentative:
-              Boolean(originalEvent.tentative)
-          });
-        }
-        setIsEditingEvent(false);
-      }}
-    >
-      Cancel Editing
-    </button>
-  )}
-  <button
-    type="button"
-    onClick={closeEventModal}
-  >
-    Close
-  </button>
-</div>
+              <button
+                type="button"
+                onClick={() => setSelectedCategories([])}
+              >
+                Show All
+              </button>
 
-          
+              <button
+                type="button"
+                className="primary"
+                onClick={() => setShowFilterModal(false)}
+              >
+                Apply
+              </button>
+            </div>
           </div>
         </Modal>
       )}
@@ -322,7 +277,12 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <label>Location<input value={draft.location || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({ ...draft, location: event.target.value })} /></label>
             <label>Presenter<input value={draft.presenter || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
-            <div className="editor-actions"><button className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>{selectedEvent && <button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>}<button type="button" onClick={closeEventModal}>Cancel</button></div>
+            <div className="editor-actions">
+                {selectedEventId !== null && isEditingEvent === false ? (<button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>) : (<button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>)}
+                {selectedEventId !== null && isEditingEvent && (<button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>)}
+                {selectedEventId !== null && isEditingEvent && (<button type="button" onClick={() => {const originalEvent = events.find((event) => event.id === selectedEventId); if (originalEvent) {setDraft({...originalEvent, endDate: originalEvent.endDate || originalEvent.date, presenter: originalEvent.presenter || '', tentative: Boolean(originalEvent.tentative)});} setIsEditingEvent(false);}}>Cancel Editing</button>)}
+                <button type="button" onClick={closeEventModal}>Close</button>
+            </div>
           </form>
         </Modal>
       )}
