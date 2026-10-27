@@ -21,6 +21,7 @@ function App() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [isEditingEvent, setIsEditingEvent] = useState(false);
 
 function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelectedCategories([...selectedCategories,categoryName]);} else {setSelectedCategories(selectedCategories.filter(item => item !== categoryName));}}
 
@@ -65,12 +66,14 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
   function startNewEvent(date = todayISO()) {
     const fallbackCategory = categoryNames.includes('Uncategorized') ? 'Uncategorized' : categoryNames[0] || 'Uncategorized';
     setSelectedEventId(null);
+    setIsEditingEvent(true);
     setDraft({ ...EMPTY_EVENT, category: fallbackCategory, date, endDate: date, tentative: false });
   }
 
   function startEditEvent(event) {
     setSelectedEventId(event.id);
     setDraft({ ...event, endDate: event.endDate || event.date, tentative: Boolean(event.tentative) });
+    setIsEditingEvent(false);
     setShowEventModal(true);
   }
 
@@ -212,11 +215,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
       </section>
 
       {showFilterModal && (
-        <Modal
-          title="Filter categories"
-          onClose={() => setShowFilterModal(false)}
-          large
-        >
+        <Modal title="Filter categories" onClose={() => setShowFilterModal(false)} large>
           <div className="category-filter-popup">
             <p className="modal-help">
               Select one or more categories. Leave every category unchecked to show all events.
@@ -244,21 +243,57 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             </div>
 
             <div className="editor-actions">
+              {selectedEvent && !isEditingEvent && (
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() => setIsEditingEvent(true)}
+                >
+                  Edit
+                </button>
+              )}
+              {(!selectedEvent || isEditingEvent) && (
+                <button
+                  type="submit"
+                  className="primary"
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : 'Save Event'}
+                </button>
+              )}
+              {selectedEvent && isEditingEvent && (
+                <button
+                   type="button"
+                   className="danger"
+                   onClick={deleteSelectedEvent}
+                   disabled={isSaving}
+                >
+                   Delete
+                </button>
+              )}
+              {selectedEvent && isEditingEvent && (
+                <button
+                   type="button"
+                   onClick={() => {
+                     setDraft({
+                       ...selectedEvent,
+                       endDate: selectedEvent.endDate || selectedEvent.date,
+                       tentative: Boolean(selectedEvent.tentative)
+                     });
+                     setIsEditingEvent(false);
+                   }}
+                >
+                  Cancel Editing
+                </button>
+              )}
               <button
-                type="button"
-                onClick={() => setSelectedCategories([])}
+                 type="button"
+                 onClick={closeEventModal}
               >
-                Show All
-              </button>
-
-              <button
-                type="button"
-                className="primary"
-                onClick={() => setShowFilterModal(false)}
-              >
-                Apply
-              </button>
+                Close
+              </button>   
             </div>
+          
           </div>
         </Modal>
       )}
@@ -266,16 +301,16 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
       {showEventModal && (
         <Modal title={selectedEvent ? 'Edit event' : 'Add event'} onClose={closeEventModal} large>
           <form onSubmit={saveEvent} className="event-form">
-            <label>Title<input autoFocus value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} required /></label>
+            <label>Title<input autoFocus value={draft.title} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({ ...draft, title: event.target.value })} required /></label>
             <div className="two-col">
-              <label>Start date<input type="date" value={draft.date} onChange={(event) => {const newStart = event.target.value;setDraft({...draft,date: newStart,endDate: newStart});}}required/></label>
-              <label>End date<input type="date" value={draft.endDate || draft.date} onChange={(event) => setDraft({ ...draft, endDate: event.target.value })} /></label>
+            <label>Start date<input type="date" value={draft.date} disabled={selectedEvent && !isEditingEvent} onChange={(event) => {const newStart = event.target.value;setDraft({...draft,date: newStart,endDate: newStart});}}required/></label>
+            <label>End date<input type="date" value={draft.endDate || draft.date} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({ ...draft, endDate: event.target.value })} /></label>
             </div>
-            <label>Category<select value={draft.category} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <option key={category.name} value={category.name}>{category.name}</option>)}</select></label>
-            <label className="check-row"><input type="checkbox" checked={Boolean(draft.tentative)} onChange={(event) => setDraft({ ...draft, tentative: event.target.checked })} />Tentative</label>
-            <label>Location<input value={draft.location || ''} onChange={(event) => setDraft({ ...draft, location: event.target.value })} /></label>
-            <label>Presenter<input value={draft.presenter || ''} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
-            <label>Notes<textarea value={draft.notes || ''} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
+            <label>Category<select value={draft.category} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({ ...draft, category: event.target.value })}>{[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => <option key={category.name} value={category.name}>{category.name}</option>)}</select></label>
+            <label className="check-row"><input type="checkbox" checked={Boolean(draft.tentative)} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({ ...draft, tentative: event.target.checked })} />Tentative</label>
+            <label>Location<input value={draft.location || ''} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({ ...draft, location: event.target.value })} /></label>
+            <label>Presenter<input value={draft.presenter || ''} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
+            <label>Notes<textarea value={draft.notes || ''} disabled={selectedEvent && !isEditingEvent} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
             <div className="editor-actions"><button className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>{selectedEvent && <button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>}<button type="button" onClick={closeEventModal}>Cancel</button></div>
           </form>
         </Modal>
