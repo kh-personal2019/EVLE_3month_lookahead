@@ -265,7 +265,7 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
       )}
 
       {showEventModal && (
-        <Modal title={selectedEventId !== null ? isEditingEvent ? 'Edit event' : 'Event details' : 'Add event'} onClose={closeEventModal} large>
+        <Modal title={selectedEventId !== null ? isEditingEvent ? 'Edit event' : 'Event details' : 'Add event'} onClose={closeEventModal} large hideClose>
           <form onSubmit={saveEvent} className="event-form">
             <label>Title<input autoFocus value={draft.title} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({ ...draft, title: event.target.value })} required /></label>
             <div className="two-col">
@@ -278,15 +278,15 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <label>Presenter<input value={draft.presenter || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
             <div className="editor-actions">
-              {/* Existing event opened in read-only mode */}
-                {selectedEventId && !isEditingEvent && (<button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>)}
-              {/* New event or existing event currently being edited */}
-                {(!selectedEventId || isEditingEvent) && (<button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>)}
-              {/* Only allow delete after Edit Event is clicked */}
-                {selectedEvent && isEditingEvent && (<button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>)}
-              {/* Existing event being edited */}
-                {selectedEvent && isEditingEvent && (<button type="button" onClick={() => {setDraft({...selectedEvent, endDate: selectedEvent.endDate || selectedEvent.date, tentative: Boolean(selectedEvent.tentative)}); setIsEditingEvent(false);}}>Cancel Editing</button>)}
-              <button type="button" onClick={closeEventModal}>Close</button>
+              {/* EXISTING EVENT - READ ONLY */}
+                {selectedEventId !== null && !isEditingEvent && (<><button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>
+                <button type="button" onClick={closeEventModal}>Close</button></>)}
+              {/* NEW EVENT */}
+                {selectedEventId === null && (<><button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>
+                <button type="button" onClick={closeEventModal}>Cancel</button></>)}
+              {/* EXISTING EVENT - EDIT MODE */}
+                {selectedEventId !== null && isEditingEvent && (<><button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>
+                <button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button><button type="button" onClick={() => {const originalEvent = events.find((event) => event.id === selectedEventId); if (originalEvent) {setDraft({...originalEvent, endDate: originalEvent.endDate || originalEvent.date, presenter: originalEvent.presenter || '', tentative: Boolean(originalEvent.tentative)});} setIsEditingEvent(false);}}>Cancel Editing</button></>)}
             </div>
           </form>
         </Modal>
@@ -315,8 +315,8 @@ function CategoryEditor({ category, onUpdate, onDelete, disabled }) {
   return <div className="category-row"><input value={name} onChange={(event) => setName(event.target.value)} /><input type="color" value={color} onChange={(event) => setColor(event.target.value)} /><button onClick={() => onUpdate(category.name, { name, color })} disabled={disabled}>Save</button><button className="danger" onClick={() => onDelete(category.name)} disabled={disabled}>Delete</button></div>;
 }
 
-function Modal({ title, children, onClose, large = false }) {
-  return <div className="modal-backdrop" role="dialog" aria-modal="true"><div className={large ? 'modal-card modal-large' : 'modal-card'}><div className="modal-header"><h2>{title}</h2><button aria-label="Close" onClick={onClose}>Close</button></div>{children}</div></div>;
+function Modal({ title, children, onClose, large = false, hideClose = false }) {
+  return <div className="modal-backdrop" role="dialog" aria-modal="true"><div className={large ? 'modal-card modal-large' : 'modal-card'}><div className="modal-header"><h2>{title}</h2>{!hideClose && (<button aria-label="Close" onClick={onClose}>Close</button>)}</div>{children}</div></div>;
 }
 
 function Month({ month, events, categories, categoryColorMap, onNew, onEdit }) {
