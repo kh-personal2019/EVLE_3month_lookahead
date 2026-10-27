@@ -278,11 +278,15 @@ function toggleSelectedCategory(categoryName, checked) {if (checked) {setSelecte
             <label>Presenter<input value={draft.presenter || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({...draft, presenter: event.target.value })} /></label>
             <label>Notes<textarea value={draft.notes || ''} disabled={selectedEventId !== null && !isEditingEvent} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows="5" /></label>
             <div className="editor-actions">
-                {selectedEventId !== null && !isEditingEvent (<button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>)}
+              {/* Existing event opened in read-only mode */}
+                {selectedEventId && !isEditingEvent && (<button type="button" className="primary" onClick={() => setIsEditingEvent(true)}>Edit Event</button>)}
+              {/* New event or existing event currently being edited */}
                 {(!selectedEventId || isEditingEvent) && (<button type="submit" className="primary" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Event'}</button>)}
-                {selectedEventId !== null && isEditingEvent && (<button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>)}
-                {selectedEventId !== null && isEditingEvent && (<button type="button" onClick={() => {const originalEvent = events.find((event) => event.id === selectedEventId); if (originalEvent) {setDraft({...originalEvent, endDate: originalEvent.endDate || originalEvent.date, presenter: originalEvent.presenter || '', tentative: Boolean(originalEvent.tentative)});} setIsEditingEvent(false);}}>Cancel Editing</button>)}
-                <button type="button" onClick={closeEventModal}>Close</button>
+              {/* Only allow delete after Edit Event is clicked */}
+                {selectedEvent && isEditingEvent && (<button type="button" className="danger" onClick={deleteSelectedEvent} disabled={isSaving}>Delete</button>)}
+              {/* Existing event being edited */}
+                {selectedEvent && isEditingEvent && (<button type="button" onClick={() => {setDraft({...selectedEvent, endDate: selectedEvent.endDate || selectedEvent.date, tentative: Boolean(selectedEvent.tentative)}); setIsEditingEvent(false);}}>Cancel Editing</button>)}
+              <button type="button" onClick={closeEventModal}>Close</button>
             </div>
           </form>
         </Modal>
